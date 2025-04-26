@@ -1,0 +1,542 @@
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #151c21;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #1e2a32;
+            width: 100%;
+            display: flex;
+        }
+
+        .topnav a {
+            display: flex;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 8px 12px;
+            text-decoration: none;
+            font-size: 17px;
+            transition: background-color 0.3s, color 0.1s;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        
+
+        .spacer {
+            flex-grow: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-right: 5px;
+        }
+
+        .topnav .nav-links {
+            display: flex;
+            gap: 20px; 
+        }
+
+        .login-btn {
+            background-color: #5395f8;
+            border: none;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            padding: 10px 20px;
+        }
+
+        .topimg {
+            width: 100%;
+            height: auto;
+            max-width: 600px;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        
+        @font-face {
+            font-family: 'WarframeFanFont';
+            src: url('fonts/WarframeFanFont_b1.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        
+        .obal3 {
+            display: grid;
+            grid-template-areas:
+                "header header header"
+                "menu content footer";
+            gap: 20px;
+            grid-template-columns: 1fr 1fr 1fr;
+            background-color: #1e2a32;
+            padding: 20px;
+            margin: 30px auto;
+            border-radius: 10px;
+            max-width: 1200px;
+            min-height: 290px;  /* 290 px */
+            align-content: space-evenly;
+        }
+
+        .obal3 > a, .obal3 > div {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px 20px 2px 20px; 
+            border-radius: 8px;
+        }
+        .obal3 > a:hover, .obal3 > div:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(26, 27, 27, 0.5);
+            background: #222;
+        }
+
+        .obal3 > div.header {
+            grid-area: header;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px 20px 2px 20px; 
+            border-radius: 8px;
+        }
+        .obal3 > a.menu {
+          text-align: center;
+          grid-area: menu;
+          display: block;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(26, 27, 27, 0.5);
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+        .obal3 > a.content {
+          text-align: center;
+          grid-area: content;
+          display: block;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(26, 27, 27, 0.5);
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+        .obal3 > a.footer {
+          text-align: center;
+          grid-area: footer;
+          display: block;
+            margin: 20px;
+            padding: 20px; 
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(26, 27, 27, 0.5);
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .obal3 a {
+            color: white;
+            text-decoration: none;
+        }
+        .search-container {
+            justify-content: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type=search] {
+            padding: 10px;
+            font-size: 16px;
+            width: 450px;
+            border: 3px solid #5395f8;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .search-container input[type=search]:hover {
+            border: 3px solid #66b0f8;
+            transition: background-color 0.3s;
+        }
+
+        .search-container input[type=search]:focus {
+            outline: none;
+            border: 3px solid #66b0f8;
+        }
+        .search-container input[type=search]:focus::placeholder {
+            color: #66b0f8;
+        }
+        .search-container input[type=search]:hover {
+            border: 3px solid #66b0f8;
+            transition: background-color 0.3s;
+        }
+
+        .search-container input[type=search]:focus {
+            outline: none;
+            border: 3px solid #66b0f8;
+        }
+        .search-container input[type=search]:focus::placeholder {
+            color: #66b0f8;
+        }
+
+        .search-container button:hover {
+            background-color: #66b0f8;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button {
+            position: absolute;
+            right: 5px;
+            background-color: #5395f8;
+            border: none;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-container2 {
+            justify-content: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-container2 input[type=search] {
+            padding: 10px;
+            font-size: 16px;
+            width: 450px;
+            border: 3px solid #5395f8;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .search-container2 input[type=search]:hover {
+            border: 3px solid #66b0f8;
+            transition: background-color 0.3s;
+        }
+
+        .search-container2 input[type=search]:focus {
+            outline: none;
+            border: 3px solid #66b0f8;
+        }
+        .search-container2 input[type=search]:focus::placeholder {
+            color: #66b0f8;
+        }
+        .search-container2 input[type=search]:hover {
+            border: 3px solid #66b0f8;
+            transition: background-color 0.3s;
+        }
+
+        .search-container2 input[type=search]:focus {
+            outline: none;
+            border: 3px solid #66b0f8;
+        }
+        .search-container2 input[type=search]:focus::placeholder {
+            color: #66b0f8;
+        }
+
+        .search-container2 button {
+            position: absolute;
+            right: 2px;
+            background-color: #5395f8;
+            border: none;
+            cursor: pointer;
+            width: 56px;
+            height: 42px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-container2 button:hover {
+            background-color: #66b0f8;
+            transition: background-color 0.3s;
+        }
+
+        /* Styly pro sekce s obrázky */
+        .menu div, .content div, .footer div {
+            font-family: WarframeFanFont;
+            font-size: 40px;
+            color: #63b0c7;
+        }
+
+        .menu img, .content img, .footer img {
+            max-width: 250px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        /* Mod table styles */
+        .mods-table {
+            width: 95%;
+            max-width: 1200px;
+            border-collapse: collapse;
+            margin: 30px auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .mods-table th, .mods-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .mods-table th {
+            background-color: #1e2a32;
+            color: #63b0c7;
+            font-size: 18px;
+        }
+        .mods-table td {
+            font-size: 16px;
+            color: #f0f0f0;
+        }
+        .mods-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            transition: background-color 0.2s;
+        }
+
+        .mod-image img {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 50px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        .mods-table a {
+            color: inherit;
+            text-decoration: none;
+            color: #66b0f8;
+        }
+        .mods-table a:hover {
+            text-decoration: underline;
+        }
+        .mods-table {
+            overflow: visible;
+        }
+        .mod-image img:hover {
+            transform: scale(3);
+            z-index: 999;
+            position: relative;
+        }
+    
+
+        img[alt="Mod image"]:not([src*="https://warframe.market"]) {
+            border: 2px solid red;
+        }
+
+
+
+        /* Mod details styles */
+        .mod-details-wrapper {
+            margin-top: 50px;
+            background-color: #25333b;
+            padding: 30px;
+            border-radius: 8px;
+            color: #e0e0e0;
+        }
+        
+        .mod-name {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #f0f0f0;
+        }
+        
+        .mod-details {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            align-items: start;
+        }
+        
+        .mod-details-img {
+            text-align: center;
+        }
+        
+        .mod-details-img img {
+            width: 80px;
+            height: 116px;
+            transition: transform 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .mod-details-img img:hover {
+            transform: scale(2.5);
+            z-index: 10;
+            position: relative;
+        }
+        
+        .mod-details-description {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mod-details-description ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .mod-details-description li {
+            margin-bottom: 12px;
+        }
+        
+        .mod-details-description strong {
+            margin-right: 10px;
+        }
+        
+        .description-container {
+            position: relative;
+            display: inline-block;
+            text-decoration: underline;
+            color: #82cfff;
+            cursor: pointer;
+        }
+        
+        .description-hover {
+            display: none;
+            position: absolute;
+            top: 24px;
+            left: 0;
+            background-color: #1a3a5c;
+            border: 1px solid #3a5d78;
+            padding: 10px;
+            width: 300px;
+            z-index: 5;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+        }
+        .description-container:hover .description-hover {
+            display: block;
+        }
+        .mod-details-footer {
+            grid-column: span 2;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .mod-details-button {
+            background-color: #5395f8;
+            border: none;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.1s;
+        }
+        .mod-details-button:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #4a5a63;
+            margin: 40px 0 0;
+            width: 100%;
+        }
+
+
+
+        /* popup when new offer */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(56, 62, 65, 0.75);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1e2b33;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 128, 255, 0.5);
+            width: 320px;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .modal-content h2 {
+            margin: 0 0 15px;
+            text-align: center;
+            color: #82cfff;
+        }
+        .modal-content label {
+            font-size: 14px;
+            color: #ccc;
+        }
+        .modal-content input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            background-color: #2c3e50;
+            border: 1px solid #3f5b6b;
+            color: #fff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .mod-details-button.cancel {
+            background-color: #777;
+        }
+        .mod-details-button.cancel:hover {
+            background-color: #999;
+            color: #000;
+        }
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes modalFadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+        .modal-content {
+            animation: modalFadeIn 0.3s ease forwards;
+        }
+        .modal-overlay.closing .modal-content {
+            animation: modalFadeOut 0.2s ease forwards;
+        }
