@@ -64,7 +64,7 @@ $transactions = $dibi->fetchAll('
 ', $userId);
 
 ?>
-<?php include("./pohledy/html_top.phtml"); ?>
+<?php include("./pohledy/html_top copy.phtml"); ?>
 <div class="user-panel">
     <h2>Welcome, <?= htmlspecialchars($_SESSION['username']) ?></h2>
     <?php
