@@ -50,77 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Registrace</title>
-    <style>
-        body {
-            background-color: #1a252f;
-            color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .register-container {
-            background-color: #25333b;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            width: 300px;
-        }
-        .register-container h3 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            border: none;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #5395f8;
-            border: none;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #82cfff;
-        }
-        .error {
-            color: #ff4c4c;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 15px;
-        }
-        .login-link a {
-            color: #82cfff;
-            text-decoration: none;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WarframeTradeHub - Registrace</title>
+    <link rel="stylesheet" href="ehh.css">
 </head>
-<body>
-    <div class="register-container">
+<body class="logreg-body">
+    <div class="logreg-container">
         <h3>Registrace</h3>
 
         <?php if (isset($error)): ?>
-            <div class="error"><?= htmlspecialchars($error) ?></div>
+            <div style="color: red;"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
         <form method="POST">
@@ -133,10 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="password_confirm">Potvrdit heslo</label>
             <input type="password" id="password_confirm" name="password_confirm" required>
 
-            <button type="submit">Registrovat se</button>
+            <button type="submit" class="logreg-button">Registrovat se</button>
         </form>
 
-        <div class="login-link">
+        <div class="logreg-link">
             Už máte účet? <a href="login.php">Přihlásit se</a>
         </div>
     </div>
