@@ -483,7 +483,6 @@
             text-align: center;
             margin-bottom: 20px;
         }
-
         .logreg-container label {
             display: block;
             margin: 10px 0 5px;
@@ -495,7 +494,8 @@
             border: none;
             border-radius: 4px;
             margin-bottom: 15px;
-            background-color: #3f668d;;
+            background-color: #3f668d;
+            box-sizing: border-box;
         }
         .logreg-button {
             width: 100%;
