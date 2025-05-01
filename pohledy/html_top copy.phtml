@@ -15,6 +15,34 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             color: white;
             border-radius: 5px;
         }
+        .header-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.header-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.profile-pic, .profile-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #3f668d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.profile-pic {
+    object-fit: cover;
+}
+.profile-placeholder svg {
+    stroke: #ffffff;
+}
+
+
 </style>
 <body>
     <div class="topnav">
@@ -28,6 +56,21 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <?php if (isset($_SESSION['id_usr'])): ?>
             <div class="spacer">
             <a href="logout.php">Odhlásit se</a>
+            <?php if (isset($_SESSION['username'])): ?>
+                <div class="header-profile">
+                    <?php if (!empty($_SESSION['profile_picture']) && file_exists('uploads/' . $_SESSION['profile_picture'])): ?>
+                        <img src="uploads/<?= htmlspecialchars($_SESSION['profile_picture']) ?>" alt="Profil" class="profile-pic">
+                    <?php else: ?>
+                        <div class="profile-placeholder">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M16 21v-2a4 4 0 0 0-8 0v2"></path>
+                        </svg>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif ?>
+
             </div>
         <?php else: ?>
             <div class="spacer">

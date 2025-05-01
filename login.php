@@ -19,9 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user) {
                 if (password_verify($password, $user['password'])) {
                     // Successful login
-                    $_SESSION['id_usr']    = $user['id_usr'];
-                    $_SESSION['username']  = $user['username'];
+                    $_SESSION['id_usr']     = $user['id_usr'];
+                    $_SESSION['username']   = $user['username'];
                     $_SESSION['fingerprint'] = generateFingerprint();
+
+                    // Pokud má uživatel profilový obrázek, ulož ho do session
+                    $_SESSION['profile_picture'] = $user['profile_picture'] ?? '';
 
                     header("Location: index.php");
                     exit();

@@ -2,9 +2,48 @@
 require "./config.php";
 requireLogin();
 
+
 $error = null;
 
 $userId = $_SESSION['id_usr'];
+if (isset($_POST['upload_picture']) && isset($_FILES['profile_picture'])) {
+    $file = $_FILES['profile_picture'];
+
+    if ($file['error'] === UPLOAD_ERR_OK) {
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $maxSize = 2 * 1024 * 1024; // 2 MB
+
+        if (!in_array($file['type'], $allowedTypes)) {
+            $error = 'Povolené jsou pouze JPG, PNG, GIF a WEBP obrázky.';
+        } elseif ($file['size'] > $maxSize) {
+            $error = 'Maximální velikost souboru je 2 MB.';
+        } else {
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = 'profile_' . $userId . '.' . $ext;
+            $path = 'uploads/' . $filename;
+
+            if (!is_dir('uploads')) mkdir('uploads');
+
+            move_uploaded_file($file['tmp_name'], $path);
+
+            // Uložit do DB
+            $dibi->query('UPDATE users SET profile_picture = %s WHERE id_usr = %i', $filename, $userId);
+            $_SESSION['profile_picture'] = $filename;
+
+            header('Location: user.php');
+            die(); // Prevent further execution after redirect
+        }
+    } else {
+        $error = 'Chyba při nahrávání souboru.';
+    }
+}
+
+// Doplní profilový obrázek do session pokud chybí
+if (!isset($_SESSION['profile_picture'])) {
+    $user = $dibi->fetch('SELECT profile_picture FROM users WHERE id_usr = %i', $userId);
+    $_SESSION['profile_picture'] = $user ? $user->profile_picture : null;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_sold'])) {
     $offerId = intval($_POST['offer_id']);
 
@@ -71,6 +110,11 @@ $transactions = $dibi->fetchAll('
         if ($error) {
         echo "<p style='color:red;'>$error</p>";
     }?>
+    <h3>Nahrát profilový obrázek</h3>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="profile_picture" accept="image/*" required>
+        <button type="submit" name="upload_picture">Nahrát</button>
+    </form>
 
     <div class="tabs">
         <button onclick="showTab('offers')">Active Offers</button>

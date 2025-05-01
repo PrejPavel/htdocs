@@ -1,7 +1,7 @@
 <?php
 require("./config.php");
 requireLogin();
-include("./pohledy/html_top.phtml");
+include("./pohledy/html_top copy.phtml");
 
 $modId = $_GET['id'] ?? null;
 //* htaccess na lepsi cesty nez mod.php?id=neco
