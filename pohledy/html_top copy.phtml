@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="cs">
+<?php
+$currentPage = basename($_SERVER['PHP_SELF']);
+?>
+<head>
+    <link rel="stylesheet" href="ehh.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warframe Trade Hub</title>
+</head>
+<style>
+.topnav a.active {
+            background-color: #63b0c7;
+            color: white;
+            border-radius: 5px;
+        }
+</style>
+<body>
+    <div class="topnav">
+        <div class="nav-links">
+            <a class="<?= ($currentPage == 'index.php') ? 'active' : '' ?>" href="index.php">Domovská stránka</a>
+            <a class="<?= ($currentPage == 'controller.php') ? 'active' : '' ?>" href="#news">Novinky</a>
+            <a class="<?= ($currentPage == 'login.php') ? 'active' : '' ?>" href="#contact">Kontakt</a>
+            <a class="<?= ($currentPage == 'config.php') ? 'active' : '' ?>" href="#about">O nás</a>
+        </div>
+        
+        <?php if (isset($_SESSION['id_usr'])): ?>
+            <div class="spacer">
+            <a href="logout.php">Odhlásit se</a>
+            </div>
+        <?php else: ?>
+            <div class="spacer">
+            <a href="login.php" class="login-btn">Přihlásit se</a>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M16 21v-2a4 4 0 0 0-8 0v2"></path>
+            </svg>
+            </div>
+        <?php endif; ?>
+    </div>
