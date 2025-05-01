@@ -36,8 +36,6 @@ foreach ($mods as $mod) {
         ];
     }
 }
-
-
 ?>
 
 <div class="search-container2" style="margin-top: 30px;">
@@ -57,6 +55,7 @@ foreach ($mods as $mod) {
             <th>Mod</th>
             <th>Subcategory</th>
             <th>Rarity</th>
+            <th>Offers</th>
         </tr>
     </thead>
     <tbody id="modsTableBody">
@@ -75,6 +74,12 @@ foreach ($mods as $mod) {
                 <td><a href="mod.php?id=<?= $mod['id_item'] ?>"><?= htmlspecialchars($mod['name']) ?></a></td>
                 <td><?= htmlspecialchars($mod['subcategory']) ?></td>
                 <td><?= htmlspecialchars($mod['rarity']) ?></td>
+                <td>
+                    <?php
+                    $NumberOfOffers = $dibi->select("COUNT(id_offer)")->from("offer")->where("id_item = ?", $mod["id_item"])->fetchSingle();
+                    echo $NumberOfOffers;
+                    ?>
+                </td>
             </tr>
         <?php endforeach; ?>
     </tbody>
