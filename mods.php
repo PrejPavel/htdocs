@@ -1,7 +1,7 @@
 <?php
 require("./config.php");
 requireLogin();
-include("./pohledy/html_top copy.phtml");
+include("./pohledy/html_top copy 2.phtml");
 
 // Get mods from the database
 $mods = $dibi->query("

@@ -1,6 +1,6 @@
 <?php
 require "./config.php";
-include("./pohledy/html_top.phtml");
+include("./pohledy/html_top copy 2.phtml");
 ?>
 
 <div class="obaltopimg">

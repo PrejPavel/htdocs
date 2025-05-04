@@ -1,7 +1,7 @@
 <?php
 require("./config.php");
 requireLogin();
-include("./pohledy/html_top copy.phtml");
+include("./pohledy/html_top copy 2.phtml");
 
 $modId = $_GET['id'] ?? null;
 //* htaccess na lepsi cesty nez mod.php?id=neco
@@ -125,16 +125,29 @@ function closeOfferForm() {
         <tbody>
             <?php
             $offers = $dibi->query("
-            SELECT offer.*, users.username
+            SELECT offer.*, users.profile_picture, users.username
             FROM offer
             JOIN users ON offer.id_ownr = users.id_usr
             WHERE offer.id_item = ?", $modId
             )->fetchAll();
+
             // Display offers in a table
             if (count($offers) > 0) {
                 foreach ($offers as $offer) {
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($offer['username']) . "</td>";
+                    echo "<td>";
+                    echo "<div class='profile-cell'>";
+                    if ($offer['profile_picture']) {
+                        echo "<img src='uploads/" . htmlspecialchars($offer['profile_picture']) . "' class='profile-pic-table'>";
+                    } else {
+                        echo "<svg class='profile-pic-table' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+                                <circle cx='12' cy='8' r='4'></circle>
+                                <path d='M16 21v-2a4 4 0 0 0-8 0v2'></path>
+                              </svg>";
+                    }
+                    echo "<span>" . htmlspecialchars($offer['username']) . "</span>";
+                    echo "</div></td>";
+
                     echo "<td>" . htmlspecialchars($offer['price']) . "</td>";
                     echo "<td>" . htmlspecialchars($offer['count']) . "</td>";
                     echo "<td>" . htmlspecialchars($offer['rank']) . "</td>";
@@ -145,11 +158,7 @@ function closeOfferForm() {
             }
             ?>
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4">Total offers: <?= count($offers) ?></td>
-            </tr>
-        </tfoot>
     </table>
 </div>
 </body>
+</html>

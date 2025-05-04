@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="cs">
+<?php
+$currentPage = basename($_SERVER['PHP_SELF']);
+?>
+<head>
+    <link rel="stylesheet" href="ehh.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warframe Trade Hub</title>
+</head>
+<style>
+.topnav a.active {
+    background-color: #63b0c7;
+    color: white;
+    border-radius: 5px;
+}
+.header-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-pic, .profile-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #3f668d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.profile-link {
+    text-decoration: none;
+    color: inherit;
+}
+.profile-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+}
+.profile-inner span {
+    line-height: 1;
+    font-size: 16px;
+}
+
+.profile-pic:hover{
+    cursor: pointer;
+    display: block;
+}
+.profile-pic {
+    object-fit: cover;
+}
+.profile-container a:hover{
+    background-color: #1e2a32;
+    color: lightskyblue;
+    text-decoration: underline;
+}
+.profile-container a {
+    margin: 0;
+    align-items: center;
+}
+.profile-hover a:hover {
+    background-color: #ddd;
+    color: black;
+    opacity: 1;
+}
+.profile-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+}
+.profile-container:hover .profile-hover {
+    display: block;
+    z-index: 9999;
+}
+.profile-hover {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    white-space: nowrap;
+    background-color: #1a3a5c;
+    border: 1px solid #3a5d78;
+    padding: 10px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    z-index: 5;
+}
+.profile-placeholder svg {
+    stroke: #ffffff;
+}
+
+
+</style>
+<body>
+    <div class="topnav">
+        <div class="nav-links">
+            <a class="<?= ($currentPage == 'index.php') ? 'active' : '' ?>" href="index.php">Domovská stránka</a>
+            <a class="<?= ($currentPage == 'mods.php') ? 'active' : '' ?>" href="mods.php">Mods</a>
+            <a class="<?= ($currentPage == 'login.php') ? 'active' : '' ?>" href="#contact">Kontakt</a>
+            <a class="<?= ($currentPage == 'config.php') ? 'active' : '' ?>" href="#about">O nás</a>
+        </div>
+
+        <?php if (isset($_SESSION['id_usr'])): ?>
+    <div class="spacer">
+        <?php if (isset($_SESSION['username'])): ?>
+            <div class="header-profile">
+                <div class="profile-container">
+                    <?php if (!empty($_SESSION['profile_picture']) && file_exists('uploads/' . $_SESSION['profile_picture'])): ?>
+                        <div class="header-profile">
+                            <a href="user.php" class="profile-link">
+                                <div class="profile-inner">
+                                    <span><?= htmlspecialchars($_SESSION['username']) ?></span>
+                                    <img src="uploads/<?= htmlspecialchars($_SESSION['profile_picture']) ?>" alt="Profil" class="profile-pic">
+                                </div>
+                            </a>
+                        </div>
+
+                    <?php else: ?>
+                        <a href="user.php">
+                            <span><?= htmlspecialchars($_SESSION['username']) ?></span>
+                            <div class="profile-placeholder">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="4"></circle>
+                                    <path d="M16 21v-2a4 4 0 0 0-8 0v2"></path>
+                                </svg>
+                            </div>
+                        </a>
+                    <?php endif; ?>
+                    <div class="profile-hover">
+                        <a href="logout.php">Odhlásit se</a>
+                    </div>
+                </div>
+            </div>
+        <?php endif ?>
+    </div>
+<?php else: ?>
+    <div class="spacer">
+        <a href="login.php" class="login-btn">Přihlásit se</a>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M16 21v-2a4 4 0 0 0-8 0v2"></path>
+        </svg>
+    </div>
+<?php endif; ?>
+    </div>

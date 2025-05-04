@@ -10,10 +10,11 @@
         }
 
         .topnav {
-            overflow: hidden;
+
             background-color: #1e2a32;
             width: 100%;
             display: flex;
+
         }
 
         .topnav a {
@@ -311,6 +312,8 @@
         .mods-table td {
             font-size: 16px;
             color: #f0f0f0;
+            vertical-align: middle;
+            height: 48px;
         }
         .mods-table tr:hover {
             background-color: rgba(255, 255, 255, 0.08);
@@ -522,6 +525,30 @@
             text-decoration: underline;
         }
 
+        /* Profile Pic */
+        .profile-pic-table {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .profile-cell {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: flex-start;
+            height: 48px;
+        }
+        
+        .profile-pic-table {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
         /* popup when new offer */
         .modal-overlay {
             display: none;
@@ -554,7 +581,7 @@
             color: #ccc;
         }
         .modal-content input[type="number"] {
-            width: 100%;
+            width: 94.5%;
             padding: 8px;
             background-color: #2c3e50;
             border: 1px solid #3f5b6b;
@@ -600,3 +627,93 @@
         .modal-overlay.closing .modal-content {
             animation: modalFadeOut 0.2s ease forwards;
         }
+
+        .offers-section {
+            margin-top: 40px;
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+          }
+          .edit-input {
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 4px;
+            border-radius: 4px;
+            width: 180px;
+            font-size: 14px;
+          }
+        
+          .edit-btn, .save-btn {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+          }
+          .profile-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+          }
+        
+          .profile-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+          }
+        /* bumbac */
+          .label {
+            min-width: 80px;
+            font-weight: bold;
+            color: #ccc;
+            font-size: 14px;
+          }
+        
+          .value {
+            color: #f2f2f2;
+            font-size: 14px;
+          }
+          .action-btn {
+            background-color: #444;
+            color: white;
+            padding: 4px 7px;
+            border: none;
+            border-radius: 4px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            border: 1px solid black;
+          }
+        
+          .action-btn:hover {
+            background-color: #666;
+          }
+          .edit-btn, .save-btn {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            border: 1px solid black;
+          }
+          .edit-btn:hover, .save-btn:hover {
+            background-color: #666;
+          }
+          .btn {
+            background-color: #444;
+            color: white;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 5px;
+            border: 1px solid black;
+          }

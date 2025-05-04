@@ -2,90 +2,60 @@
 require "./config.php";
 requireLogin();
 
-
 $error = null;
-
 $userId = $_SESSION['id_usr'];
+
+//Profile picture upload
 if (isset($_POST['upload_picture']) && isset($_FILES['profile_picture'])) {
-    $file = $_FILES['profile_picture'];
+  $file = $_FILES['profile_picture'];
 
-    if ($file['error'] === UPLOAD_ERR_OK) {
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        $maxSize = 2 * 1024 * 1024; // 2 MB
+  if ($file['error'] === UPLOAD_ERR_OK) {
+      $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      $maxSize = 2 * 1024 * 1024; // 2 MB
 
-        if (!in_array($file['type'], $allowedTypes)) {
-            $error = 'Povolené jsou pouze JPG, PNG, GIF a WEBP obrázky.';
-        } elseif ($file['size'] > $maxSize) {
-            $error = 'Maximální velikost souboru je 2 MB.';
-        } else {
-            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $filename = 'profile_' . $userId . '.' . $ext;
-            $path = 'uploads/' . $filename;
+      if (!in_array($file['type'], $allowedTypes)) {
+          $error = 'Povolené jsou pouze JPG, PNG, GIF a WEBP obrázky.';
+      } elseif ($file['size'] > $maxSize) {
+          $error = 'Maximální velikost souboru je 2 MB.';
+      } else {
+          $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+          $filename = 'profile_' . $userId . '.' . $ext;
+          $path = 'uploads/' . $filename;
 
-            if (!is_dir('uploads')) mkdir('uploads');
+          if (!is_dir('uploads')) mkdir('uploads');
 
-            move_uploaded_file($file['tmp_name'], $path);
+          move_uploaded_file($file['tmp_name'], $path);
 
-            // Uložit do DB
-            $dibi->query('UPDATE users SET profile_picture = %s WHERE id_usr = %i', $filename, $userId);
-            $_SESSION['profile_picture'] = $filename;
+          // Uložit do DB
+          $dibi->query('UPDATE users SET profile_picture = %s WHERE id_usr = %i', $filename, $userId);
+          $_SESSION['profile_picture'] = $filename;
 
-            header('Location: user.php');
-            die(); // Prevent further execution after redirect
-        }
-    } else {
-        $error = 'Chyba při nahrávání souboru.';
-    }
+          header('Location: user.php');
+          die(); // Prevent further execution after redirect
+      }
+  } else {
+      $error = 'Chyba při nahrávání souboru.';
+  }
+}
+// Profile picture delete
+if (isset($_POST['delete_picture'])) {
+  $current = $dibi->fetchSingle('SELECT profile_picture FROM users WHERE id_usr = %i', $userId);
+  if ($current && file_exists('uploads/' . $current)) {
+      unlink('uploads/' . $current);
+  }
+  $dibi->query('UPDATE users SET profile_picture = NULL WHERE id_usr = %i', $userId);
+  $_SESSION['profile_picture'] = null;
+  header('Location: user.php');
+  exit;
 }
 
-// Doplní profilový obrázek do session pokud chybí
-if (!isset($_SESSION['profile_picture'])) {
-    $user = $dibi->fetch('SELECT profile_picture FROM users WHERE id_usr = %i', $userId);
-    $_SESSION['profile_picture'] = $user ? $user->profile_picture : null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_email']) && !empty($_POST['email'])) {
+    $newEmail = htmlspecialchars($_POST['email']);
+    $dibi->query('UPDATE users SET email = %s WHERE id_usr = %i', $newEmail, $userId);
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_sold'])) {
-    $offerId = intval($_POST['offer_id']);
-
-    // Fetch offer details
-    $offer = $dibi->fetch('SELECT * FROM offer WHERE id_offer = %i AND id_ownr = %i', $offerId, $userId);
-
-    if ($offer) {
-        // Debugging: Check if the offer has valid data
-        var_dump($offer); // or use echo to check values: echo $offer->id_ownr;
-
-        // Insert into transactions
-        try {
-            $dibi->query('INSERT INTO transactions', [
-                'id_ownr' => $offer->id_ownr,
-                'price' => $offer->price,
-                'count' => $offer->count,
-                'date' => new DateTime(),
-                'id_item' => $offer->id_item,
-                'rank' => $offer->rank
-            ]);
-            echo "Transaction inserted successfully"; // Debugging success
-
-            // Delete from offer
-            $dibi->query('DELETE FROM offer WHERE id_offer = %i AND id_ownr = %i', $offerId, $userId);
-
-            // Redirect to avoid resubmission
-            header("Location: " . $_SERVER['REQUEST_URI']);
-            exit;
-
-        } catch (Exception $e) {
-            $error = "Error inserting transaction: " . $e->getMessage();
-        }
-    } else {
-        $error = "Offer not found or you don't have permission to mark it as sold.";
-    }
-}
-
-
-// initialize error message variable
-$error = null;
-
-// load active offers for this user
 $offers = $dibi->fetchAll('
     SELECT o.*, i.name 
     FROM offer o 
@@ -93,154 +63,172 @@ $offers = $dibi->fetchAll('
     WHERE o.id_ownr = %i
 ', $userId);
 
-// load transaction history for this user
-$transactions = $dibi->fetchAll('
-    SELECT t.*, i.name 
-    FROM transactions t 
-    JOIN items i ON t.id_item = i.id_item 
-    WHERE t.id_ownr = %i
-    ORDER BY t.date DESC
-', $userId);
+$user = $dibi->fetch('SELECT username, email FROM users WHERE id_usr = %i', $userId);
 
+include("./pohledy/html_top copy 2.phtml");
+include("./pohledy/html_1.phtml");
 ?>
-<?php include("./pohledy/html_top copy.phtml"); ?>
-<div class="user-panel">
-    <h2>Welcome, <?= htmlspecialchars($_SESSION['username']) ?></h2>
-    <?php
-        if ($error) {
-        echo "<p style='color:red;'>$error</p>";
-    }?>
-    <h3>Nahrát profilový obrázek</h3>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="profile_picture" accept="image/*" required>
-        <button type="submit" name="upload_picture">Nahrát</button>
-    </form>
 
-    <div class="tabs">
-        <button onclick="showTab('offers')">Active Offers</button>
-        <button onclick="showTab('history')">Transaction History</button>
+<style>
+  .profile-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+  }
+
+  .profile-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  .label {
+    min-width: 80px;
+    font-weight: bold;
+    color: #ccc;
+    font-size: 14px;
+  }
+
+  .value {
+    color: #f2f2f2;
+    font-size: 14px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+    font-size: 14px;
+  }
+
+  th, td {
+    border: 1px solid #333;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #2b2b2b;
+  }
+
+  .action-btn {
+    background-color: #444;
+    color: white;
+    padding: 4px 7px;
+    border: none;
+    border-radius: 4px;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .action-btn:hover {
+    background-color: #666;
+  }
+
+  .email-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+  }
+
+  .email-section form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+/* Čára pod celým .page-header */
+/** nechat na vsech bo to musi byt jinak pokazde */
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, #3a4a56 0%, #3a4a56 50px, #82cfff 150px, #82cfff 100%);/
+  z-index: 0;
+}
+  .email-section input {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #666;
+    padding: 4px;
+    border-radius: 4px;
+    width: 180px;
+    font-size: 14px;
+  }
+
+  .email-section button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .email-section button:hover {
+    background-color: #666;
+  }
+</style>
+
+</head>
+<body>
+  <div>
+    <div class="page-header">
+      <h1>Profil</h1>
+      <!-- to s tim active link je tu zbytecne, ale necham to tu kdybych se rozhodl predelat vsecko zas -->
+      <nav class="page-nav">
+        <a href="offers.php" class="<?= basename($_SERVER['PHP_SELF']) === 'offers.php' ? 'active-link' : '' ?>">Aktivní nabídky</a>
+        <a href="user.php" class="<?= basename($_SERVER['PHP_SELF']) === 'transactions.php' ? 'active-link' : '' ?>">historie transakcí</a>
+      </nav>
     </div>
 
-    <div id="offers" class="tab-content">
-        <?php if ($offers): ?>
-        <table>
-            <thead>
-                <tr><th>Mod</th><th>Price</th><th>Quantity</th><th>Rank</th><th>Actions</th></tr>
-            </thead>
-            <tbody>
-                <?php foreach ($offers as $offer): ?>
-                <tr>
-                    <td><?= htmlspecialchars($offer['name']) ?></td>
-                    <td><?= htmlspecialchars($offer['price']) ?></td>
-                    <td><?= htmlspecialchars($offer['count']) ?></td>
-                    <td><?= htmlspecialchars($offer['rank']) ?></td>
-                    <td>
-                        <button onclick="openEditModal(<?= $offer['id_offer'] ?>, <?= $offer['price'] ?>, <?= $offer['count'] ?>, <?= $offer['rank'] ?>)">Edit</button>
-                        <button onclick="openDeleteModal(<?= $offer['id_offer'] ?>)">Delete</button>
-                        <button onclick="openSoldModal(<?= $offer['id_offer'] ?>)">Mark as Sold</button>
-                    </td>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
+    <div class="profile-section">
+      <div class="profile-row">
+        <span class="label">Uživatelské jméno:</span>
+        <span class="value"><?= htmlspecialchars($user['username'] ?? NULL) ?></span>
+      </div>
+      <div class="profile-row">
+        <span class="label">Email:</span>
+        <?php if ($user['email']): ?>
+          <span class="value"><?= htmlspecialchars($user['email'] ?? NULL) ?></span>
         <?php else: ?>
-            <p>No active offers.</p>
-        <?php endif ?>
+          <form method="POST">
+            <input type="email" name="email" required placeholder="Zadejte email">
+            <button type="submit" name="update_email" class="action-btn">Přidat email</button>
+          </form>
+        <?php endif; ?>
+      </div>
+      <div id="profile-settings" class="profile-row">
+            <span class="label">profilový obrázek</span>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="profile_picture" accept="image/*" required>
+                <button type="submit" name="upload_picture" class="action-btn">Nahrát</button>
+            </form>
+      </div>
+      <?php if ($error): ?>
+        <div style="color: red; padding: 10px;"><?= htmlspecialchars($error) ?></div>
+      <?php endif; ?>
+      <?php
+      $profilePicture = $dibi->fetchSingle('SELECT profile_picture FROM users WHERE id_usr = %i', $userId);
+      if ($profilePicture):
+      ?>
+        <div class="profile-row">
+          <span class="label">Aktuální obrázek:</span>
+          <img src="uploads/<?= htmlspecialchars($profilePicture) ?>" alt="Profilový obrázek" style="height: 100px; border-radius: 4px;">
+          <form method="POST" style="display:inline;">
+              <button type="submit" name="delete_picture" class="action-btn" onclick="return confirm('Opravdu chcete odstranit profilový obrázek?')">Smazat</button>
+          </form>
+        </div>
+      <?php endif; ?>
+
     </div>
-
-    <div id="history" class="tab-content" style="display:none;">
-        <?php if ($transactions): ?>
-        <table>
-            <thead>
-                <tr><th>Mod</th><th>Price</th><th>Quantity</th><th>Rank</th><th>Date</th></tr>
-            </thead>
-            <tbody>
-                <?php foreach ($transactions as $tx): ?>
-                <tr>
-                    <td><?= htmlspecialchars($tx['name']) ?></td>
-                    <td><?= htmlspecialchars($tx['price']) ?></td>
-                    <td><?= htmlspecialchars($tx['count']) ?></td>
-                    <td><?= htmlspecialchars($tx['rank']) ?></td>
-                    <td><?= htmlspecialchars($tx['date']) ?></td>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-        <?php else: ?>
-            <p>No transaction history.</p>
-        <?php endif ?>
-    </div>
-</div>
-
-<!-- Modals -->
-<!-- Edit Offer Modal -->
-<div id="editOfferModal" class="modal" style="display:none">
-    <form method="post">
-        <input type="hidden" name="offer_id" id="edit-offer-id">
-        <label>Price:</label><input type="number" name="price" id="edit-price" required>
-        <label>Count:</label><input type="number" name="count" id="edit-count" required>
-        <label>Rank:</label><input type="number" name="rank" id="edit-rank" required>
-        <button type="submit" name="edit_offer">Save</button>
-        <button type="button" onclick="closeEditModal()">Cancel</button>
-    </form>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div id="deleteOfferModal" class="modal" style="display:none">
-    <form method="post">
-        <input type="hidden" name="offer_id" id="delete-offer-id">
-        <p>Are you sure you want to delete this offer?</p>
-        <button type="submit" name="delete_offer">Yes, delete</button>
-        <button type="button" onclick="closeDeleteModal()">Cancel</button>
-    </form>
-</div>
-
-<!-- Mark as Sold Modal -->
-<div id="soldOfferModal" class="modal" style="display:none">
-    <form method="post">
-        <input type="hidden" name="offer_id" id="sold-offer-id">
-        <p>Mark this offer as sold?</p>
-        <button type="submit" name="mark_sold">Yes, mark as sold</button>
-        <button type="button" onclick="closeSoldModal()">Cancel</button>
-    </form>
-</div>
-
-<script>
-// Tabs
-function showTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-    document.getElementById(tabId).style.display = 'block';
-}
-
-// Edit modal
-function openEditModal(id, price, count, rank) {
-    document.getElementById('edit-offer-id').value = id;
-    document.getElementById('edit-price').value = price;
-    document.getElementById('edit-count').value = count;
-    document.getElementById('edit-rank').value = rank;
-    document.getElementById('editOfferModal').style.display = 'block';
-}
-function closeEditModal() {
-    document.getElementById('editOfferModal').style.display = 'none';
-}
-
-// Delete modal
-function openDeleteModal(id) {
-    document.getElementById('delete-offer-id').value = id;
-    document.getElementById('deleteOfferModal').style.display = 'block';
-}
-function closeDeleteModal() {
-    document.getElementById('deleteOfferModal').style.display = 'none';
-}
-
-// Mark as sold modal
-function openSoldModal(id) {
-    document.getElementById('sold-offer-id').value = id;
-    document.getElementById('soldOfferModal').style.display = 'block';
-}
-function closeSoldModal() {
-    document.getElementById('soldOfferModal').style.display = 'none';
-}
-</script>
-
-<?php include("./pohledy/html_bottom.phtml"); ?>
+  </div>
+</body>
+</html>
