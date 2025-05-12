@@ -4,12 +4,7 @@ requireLogin();
 include("./pohledy/html_top copy 2.phtml");
 
 // Get mods from the database
-$mods = $dibi->query("
-    SELECT *
-    FROM items
-    WHERE category = 'Mod'
-")->fetchAll();
-
+$mods = $dibi->select("*")->from("items")->where("category = ?", "Mod")->fetchAll();
 // API call to get mod images
 $imageMap = [];
 

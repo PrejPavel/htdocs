@@ -3,14 +3,12 @@ require "./config.php";
 requireLogin();
 
 $userId = $_SESSION['id_usr'];
-
-$offers = $dibi->fetchAll('
-    SELECT o.*, i.name 
-    FROM offer o 
-    JOIN items i ON o.id_item = i.id_item 
-    WHERE o.id_ownr = %i 
-    ORDER BY o.date DESC
-', $userId);
+$offers = $dibi->select("o.*, i.name")
+    ->from("offer o")
+    ->join("items i")->on("o.id_item = i.id_item")
+    ->where("o.id_ownr = %i", $userId)
+    ->orderBy("o.date DESC")
+    ->fetchAll();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_sold'])) {
     $offerId = intval($_POST['offer_id']);
     $offer = $dibi->fetch('SELECT * FROM offer WHERE id_offer = %i AND id_ownr = %i', $offerId, $userId);
@@ -48,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_offer'])) {
     exit;
 }
 
-include("./pohledy/html_top copy 2.phtml");
-include("./pohledy/html_1.phtml");
+include"./pohledy/html_top copy 2.phtml";
+include"./pohledy/html_1.phtml";
 ?>
 <style>
 /* Čára pod celým .page-header */

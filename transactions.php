@@ -3,14 +3,12 @@ require "./config.php";
 requireLogin();
 
 $userId = $_SESSION['id_usr'];
-
-$transactions = $dibi->fetchAll('
-    SELECT t.*, i.name 
-    FROM transactions t 
-    JOIN items i ON t.id_item = i.id_item 
-    WHERE t.id_ownr = %i
-    ORDER BY t.date DESC
-', $userId);
+$transactions = $dibi->select("t.*, i.name")
+    ->from("transactions t")
+    ->join("items i")->on("t.id_item = i.id_item")
+    ->where("t.id_ownr = %i", $userId)
+    ->orderBy("t.date DESC")
+    ->fetchAll();
 include("./pohledy/html_top copy 2.phtml"); 
 include("./pohledy/html_1.phtml");
 ?>

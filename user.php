@@ -231,4 +231,4 @@ include("./pohledy/html_1.phtml");
     </div>
   </div>
 </body>
-</html>
+</html> 

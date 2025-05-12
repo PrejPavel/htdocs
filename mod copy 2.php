@@ -11,11 +11,7 @@ if (!$modId) {
 }
 
 // Get mod from DB;
-$mod = $dibi->query("
-    SELECT *
-    FROM items
-    WHERE id_item = ?", $modId
-)->fetch();
+$mod = $dibi->select("*")->from("items")->where("id_item = ?", $modId)->fetch();
 
 if (!$mod) {
     echo "<p>Mod not found.</p>";

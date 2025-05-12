@@ -23,11 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['create_offer'])) {
 }
 
 // Get mod from DB;
-$mod = $dibi->query("
-    SELECT *
-    FROM items
-    WHERE id_item = ?", $modId
-)->fetch();
+$mod = $dibi->select("*")->from("items")->where("id_item = ?", $modId)->fetch();
 
 if (!$mod) {
     echo "<p>Mod not found.</p>";
@@ -124,13 +120,11 @@ function closeOfferForm() {
         </thead>
         <tbody>
             <?php
-            $offers = $dibi->query("
-            SELECT offer.*, users.profile_picture, users.username
-            FROM offer
-            JOIN users ON offer.id_ownr = users.id_usr
-            WHERE offer.id_item = ?", $modId
-            )->fetchAll();
-
+            $offers = $dibi->select("offer.*, users.profile_picture, users.username")
+                ->from("offer")
+                ->join("users")->on("offer.id_ownr = users.id_usr")
+                ->where("offer.id_item = ?", $modId)
+                ->fetchAll();
             // Display offers in a table
             if (count($offers) > 0) {
                 foreach ($offers as $offer) {
