@@ -94,22 +94,21 @@ include"./pohledy/html_1.phtml";
         <td><?= htmlspecialchars($offer['count']) ?></td>
         <td><?= htmlspecialchars($offer['rank']) ?></td>
         <td>
-        <button class="edit-btn" 
-                data-id="<?= $offer['id_offer'] ?>" 
-                data-price="<?= $offer['price'] ?>" 
-                data-count="<?= $offer['count'] ?>" 
-                data-rank="<?= $offer['rank'] ?>">
-          Edit
-        </button>
-        <form method="POST" action="delete_offer.php" style="display:inline;">
-          <input type="hidden" name="offer_id" value="<?= $offer['id_offer'] ?>">
-          <button type="submit" class="action-btn">Delete</button>
-        </form>
-        <form method="POST" style="display:inline;">
-          <input type="hidden" name="offer_id" value="<?= $offer['id_offer'] ?>">
-          <button type="submit" class="action-btn" name="mark_sold">Mark as Sold</button>
-        </form>
-
+          <button class="edit-btn"
+                  data-id="<?= $offer['id_offer'] ?>"
+                  data-price="<?= $offer['price'] ?>"
+                  data-count="<?= $offer['count'] ?>"
+                  data-rank="<?= $offer['rank'] ?>">
+            Edit
+          </button>
+          <form method="POST" action="delete_offer.php" style="display:inline;">
+            <input type="hidden" name="offer_id" value="<?= $offer['id_offer'] ?>">
+            <button type="submit" class="action-btn">Delete</button>
+          </form>
+          <form method="POST" style="display:inline;">
+            <input type="hidden" name="offer_id" value="<?= $offer['id_offer'] ?>">
+            <button type="submit" class="action-btn" name="mark_sold">Mark as Sold</button>
+          </form>
         </td>
       </tr>
           <?php endforeach; ?>
